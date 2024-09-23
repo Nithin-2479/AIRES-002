@@ -8,6 +8,7 @@ if (!isset($_SESSION['user_id'])) {
    header("Location: login.php");
    exit;
 }
+$json_output=null;
 // Function to call Python script dynamically and get matching resumes
 function getMatchingResumes($jobDescription, $matchPercentage) {
     // Encode the text in base64
@@ -247,12 +248,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<tr><th>ID</th><th>Name</th><th>Match</th></tr>";
 
             // Loop through the resumes and display each one in a table row
-            foreach ($json_output['resumes'] as $resume) {
-                echo "<tr>";
-                echo "<td>" . $resume['id'] . "</td>";
-                echo "<td>" . $resume['name'] . "</td>";
-                echo "<td>" . $resume['match'] . "</td>";
-                echo "</tr>";
+            if ($json_output !== null){
+                foreach ($json_output['resumes'] as $resume) {
+                    echo "<tr>";
+                    echo "<td>" . $resume['id'] . "</td>";
+                    echo "<td>" . $resume['name'] . "</td>";
+                    echo "<td>" . $resume['match'] . "</td>";
+                    echo "</tr>";
+                }
+            } else{
+                echo "<tr><td colspan='3'>No resumes found.</td></tr>";
             }
 
             echo "</table>";
